@@ -10,15 +10,15 @@ import org.springframework.stereotype.Component;
 @Component
 public class FindNewsTask {
 
-    @Autowired
-    private NewsCrawlService newsCrawlService;
+  @Autowired
+  private NewsCrawlService newsCrawlService;
 
-    private Logger logger = LoggerFactory.getLogger(FindNewsTask.class);
+  private final Logger logger = LoggerFactory.getLogger(FindNewsTask.class);
 
-    @Scheduled(fixedRate = 1000 * 60 * 5)
-    public void scheduleFixedRateTaskAsync() {
-        logger.info("Refreshing news has started");
-        newsCrawlService.findNews();
-    }
+  @Scheduled(fixedRate = 1000 * 60 * 5)
+  public void scheduleFixedRateTaskAsync() {
+    logger.info("Refreshing news has started");
+    newsCrawlService.findNews();
+  }
 
 }
