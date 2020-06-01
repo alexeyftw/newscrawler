@@ -9,9 +9,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Controller
 public class NewsController {
@@ -26,9 +26,9 @@ public class NewsController {
 
   @SuppressWarnings("CheckStyle")
   @GetMapping("/news")
-  public String getNews(Model model, @PageableDefault(sort = {"pubDate"},
+  public String showNews(Model model, @PageableDefault(sort = {"pubDate"},
           direction = Sort.Direction.DESC) Pageable pageable,
-                        @RequestParam(required = false, defaultValue = "") String filter) {
+                         @RequestParam(required = false, defaultValue = "") String filter) {
     Page<Item> news;
     if (filter != null && !filter.isEmpty()) {
       news = itemRepository.findByTitleIgnoreCaseContaining(filter, pageable);
@@ -41,8 +41,15 @@ public class NewsController {
   }
 
   @GetMapping("/news/{id}")
+  @ResponseBody
   public Item getNewsItem(@PathVariable(name = "id") Long id) {
     return itemRepository.findById(id).orElse(null);
+  }
+
+  @GetMapping("/news/all")
+  @ResponseBody
+  public List<Item> getAllNews() {
+    return itemRepository.findAll();
   }
 
 }
