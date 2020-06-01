@@ -26,9 +26,9 @@ public class NewsController {
 
   @SuppressWarnings("CheckStyle")
   @GetMapping("/news")
-  public String showTitles(Model model, @PageableDefault(sort = {"pubDate"},
+  public String getNews(Model model, @PageableDefault(sort = {"pubDate"},
           direction = Sort.Direction.DESC) Pageable pageable,
-                           @RequestParam(required = false, defaultValue = "") String filter) {
+                        @RequestParam(required = false, defaultValue = "") String filter) {
     Page<Item> news;
     if (filter != null && !filter.isEmpty()) {
       news = itemRepository.findByTitleIgnoreCaseContaining(filter, pageable);
@@ -40,9 +40,9 @@ public class NewsController {
     return "index";
   }
 
-  @GetMapping("/news/{item}")
-  public String showItem(Model model, @PathVariable Item item) {
-    model.addAttribute("item", item);
-    return "item";
+  @GetMapping("/news/{id}")
+  public Item getNewsItem(@PathVariable(name = "id") Long id) {
+    return itemRepository.findById(id).orElse(null);
   }
+
 }
