@@ -15,8 +15,8 @@ public class FindNewsTask {
 
   private final Logger logger = LoggerFactory.getLogger(FindNewsTask.class);
 
-  @Scheduled(fixedRate = 1000 * 60 * 5)
-  public void scheduleFixedRateTaskAsync() {
+  @Scheduled(fixedRate = 1000 * 60 * 5) // 5 min
+  public void scheduleTask() {
     logger.info("Refreshing news has started");
     newsCrawlService.findNews();
   }

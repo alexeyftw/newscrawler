@@ -11,8 +11,6 @@ import java.util.stream.Collectors;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -22,13 +20,13 @@ public class RssFeedProcessor {
   @Autowired
   private ItemRepository itemRepository;
 
-  private final Logger logger = LoggerFactory.getLogger(RssFeedProcessor.class);
-
   void processRssDocument(Document document, Source source) {
     Elements elements = document.select(source.getNewsContainerTag());
+    Item lastItem = itemRepository.findFirstBySourceOrderByPubDateDesc(source);
     List<Item> items = elements.stream()
             .map(element -> buildItem(element, source))
             .filter(i -> !i.getTitle().isBlank())
+            .filter(lastItem == null ? i -> true : i -> i.getPubDate().after(lastItem.getPubDate()))
             .collect(Collectors.toList());
     itemRepository.saveAll(items);
   }

@@ -23,6 +23,7 @@ dependencies {
 	compile group: 'org.springframework.boot', name: 'spring-boot-starter-freemarker', version: '2.3.0.RELEASE'
 	implementation group: 'org.projectlombok', name: 'lombok', version: '1.18.12'
 	annotationProcessor group: 'org.projectlombok', name: 'lombok', version: '1.18.12'
+	runtime group: 'org.postgresql', name: 'postgresql', version: '42.2.12'
 }
 
 test {

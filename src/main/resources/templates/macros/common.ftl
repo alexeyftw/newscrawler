@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>News Aggregator</title>
+    <title>NEWS CRAWLER</title>
     <link rel="stylesheet" href="style.css" type="text/css" media="screen"/>
 <#--    <link href="[@spring.url '/static/style.css']" rel="stylesheet" type="text/css" media="screen"/>-->
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">

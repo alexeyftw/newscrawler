@@ -26,9 +26,11 @@ public class HtmlFeedProcessor {
 
   void processHtmlDocument(Document document, Source source) {
     Elements elements = document.select(source.getNewsContainerTag());
+    Item lastItem = itemRepository.findFirstBySourceOrderByPubDateDesc(source);
     List<Item> items = elements.stream()
             .map(element -> buildItem(element, source))
             .filter(i -> i.getTitle() != null && !i.getTitle().isBlank())
+            .filter(lastItem == null ? i -> true : i -> i.getPubDate().after(lastItem.getPubDate()))
             .collect(Collectors.toList());
     itemRepository.saveAll(items);
   }
@@ -37,9 +39,10 @@ public class HtmlFeedProcessor {
 
     String preview = PreviewCreatorUtil.createPreview(element, source);
     String timeStamp = element.select(source.getPubDateTag()).attr(source.getPubDateAttribute());
-    if (timeStamp.isBlank()) {
+    if (timeStamp.isBlank()) { // скипаем промопосты/другие не соответствующие вещи из ленты
+      logger.warn("Post without timestamp found, skipping: {}", element.toString());
       return new Item();
-    } // скипаем промопосты/твиты // todO: мб не лучшее решение(попахивает костылем)))0
+    }
     Date pubDate = DateTimeParserUtil.parseTimestamp(timeStamp, source.getPubDateFormat());
 
     return Item.builder()

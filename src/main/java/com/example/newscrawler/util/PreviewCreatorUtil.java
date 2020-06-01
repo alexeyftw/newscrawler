@@ -4,8 +4,12 @@ import com.example.newscrawler.model.Source;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class PreviewCreatorUtil {
+
+  private static final Logger logger = LoggerFactory.getLogger(PreviewCreatorUtil.class);
 
   private static final String HTML = "html";
   private static final String RSS = "rss";
@@ -33,7 +37,8 @@ public class PreviewCreatorUtil {
       case RSS:
         return createPreviewFromRss(previewElements, source);
       default:
-        return ""; // todo: log warn - ne robit iz za nevernogo tipa kek
+        logger.error("Unsupported content type: {}", source.getContentType());
+        return "";
     }
   }
 
